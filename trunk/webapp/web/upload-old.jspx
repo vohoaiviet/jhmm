@@ -1,0 +1,34 @@
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0" 
+          xmlns:input="http://jakarta.apache.org/taglibs/input-1.0">
+<jsp:directive.page import="java.io.*,java.util.*,java.text.*,javax.xml.parsers.*,org.xml.sax.*,com.milowski.hmm.*,com.milowski.hmm.tools.*"
+   contentType="text/html"
+/>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head><title>JHMM Demonstration - Upload Model</title>
+<style type="text/css">
+p.title { font-weight: bold; }
+div.options { display: table; }
+div.option { display: table-row;}
+div.label { display: table-cell; 
+   padding-right: 10pt;
+}
+div > p {
+   padding: 2pt; margin: 0pt; margin-bottom: 2pt;
+}
+div.field { display: table-cell;  padding: 0pt; margin:0pt;}
+</style>
+</head>
+<body>
+<jsp:include page="navigation.jsp"/>
+<p class="title">Upload a Model</p>
+<form method="POST" action="upload-request.jsp" enctype="multipart/form-data">
+<p>1. Select your model from a file on your system:</p>
+<p> Model <input type="file" name="model"/></p>
+<p>Your model has a name internal to its structure.  This name will be used on the website.</p>
+<p>2. Make it go!
+<input type="submit" value="Upload"/>
+</p>
+</form>
+</body>
+</html>
+</jsp:root>

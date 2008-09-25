@@ -1,0 +1,135 @@
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0" 
+          xmlns:input="http://jakarta.apache.org/taglibs/input-1.0">
+<jsp:directive.page import="java.io.*,java.util.*,java.text.*,javax.xml.parsers.*,org.xml.sax.*,com.milowski.hmm.*,com.milowski.hmm.tools.*"
+   contentType="text/html"
+/>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head><title>JHMM Demonstration - Forwards/Backwards Trace</title>
+<style type="text/css">
+p.title { font-weight: bold; }
+div.options { display: table; }
+div.option { display: table-row;}
+div.label { display: table-cell; 
+   padding-right: 10pt;
+}
+div > p {
+   padding: 2pt; margin: 0pt; margin-bottom: 2pt;
+}
+div.field { display: table-cell;  padding: 0pt; margin:0pt;}
+</style>
+</head>
+<body>
+<jsp:include page="navigation.jsp"/>
+<p class="title">Calculate the Forwards/Backwards values for a Sequence</p>
+<form method="POST" action="forwards.jspx">
+<p>1. Select your model from the list below.</p>
+<p> Model
+<jsp:include page="model-list.jsp"/>
+<!--
+<select name="model">
+<option value="two-state-set-emissions.xml">Two State/Binary</option>
+<option value="two-state-two-maximum.xml">Two State/Binary/Two Maximum</option>
+<option value="two-dice-model.xml">Two Dice Model</option>
+</select>
+-->
+</p>
+<p>2. Enter a single sequence below.  If you wish to get observation data from a model, use <a href="generate.jspx">generate data</a> via this website and then cut-n-paste the data into this form.</p>
+<p>Data:</p>
+<textarea name="data" rows="2" cols="70">
+<!-- -->
+<jsp:expression>request.getParameter("data")==null ? "" : request.getParameter("data")</jsp:expression>
+</textarea>
+<p>3. Make it go!
+<input type="submit" value="Calculate"/>
+</p>
+</form>
+<jsp:scriptlet>
+   boolean badData = false;
+   String dataStr = request.getParameter("data");
+   if (dataStr!=null) {
+      if (dataStr.length()==0) {
+         badData = true;
+         out.println("&lt;p class='error'>The training data specified.&lt;/p>");
+      }
+      ServletContext context = getServletContext();
+      String path = context.getInitParameter("model-repository");
+      File repository = new File(context.getRealPath(path));
+      
+      File modelPath = new File(repository,request.getParameter("model"));
+      if (!badData) {
+      
+         try {
+            SAXParserFactory saxFactory = SAXParserFactory.newInstance();
+            saxFactory.setNamespaceAware(true);
+            SAXParser saxParser = saxFactory.newSAXParser();
+            XMLReader xmlReader = saxParser.getXMLReader();
+
+            XMLModelReader modelReader = new XMLModelReader(xmlReader);
+            FileReader modelInput = new FileReader(modelPath);
+            InputSource source = new InputSource(modelInput);
+
+            Model model = modelReader.load(source);
+
+            modelInput.close();
+
+            model.check();
+
+            Model.Translator translator = model.getTranslator();
+            short [] sequence = Forward.load(new StringReader(dataStr),translator);
+            
+            Engine hmmEngine = new Engine();
+            hmmEngine.loadModel(model);
+            double f[][] = hmmEngine.forwards(sequence,null);
+            double b[][] = hmmEngine.backwards(sequence,null);
+            double s[][] = model.getStateTransitions();
+            double e[][] = model.getStateEmissions();
+
+            NumberFormat formatter = NumberFormat.getInstance();
+            formatter.setMaximumFractionDigits(10);
+            formatter.setMinimumFractionDigits(2);
+            
+            out.println("&lt;table>");
+            out.println("&lt;tr>");
+            for (int state=0; state&lt;s.length; state++) {
+               out.print("&lt;td>F"+state+"&lt;/td>");
+            }
+            for (int state=0; state&lt;s.length; state++) {
+               out.print("&lt;td>B"+state+"&lt;/td>");
+            }
+            out.println("&lt;/tr>");
+            for (int i=0; i&lt;sequence.length; i++ ) {
+               out.println("&lt;tr>");
+               for (int state=0; state&lt;s.length; state++) {
+                  out.print("&lt;td>"+formatter.format(Math.exp(f[state][i]))+"&lt;/td>");
+               }
+               for (int state=0; state&lt;s.length; state++) {
+                  out.print("&lt;td>"+formatter.format(Math.exp(b[state][i]))+"&lt;/td>");
+               }
+               out.println("&lt;/tr>");
+            }
+            out.println("&lt;/table>");
+            double p_f = 0;
+            double p_b = 0;
+            for (int state=0; state&lt;s.length; state++) {
+               p_f += Math.exp(f[state][sequence.length-1])*s[state][0];
+               p_b += s[0][state]*e[state][sequence[0]]*Math.exp(b[state][0]);
+            }
+            out.println("&lt;p>forwards probability = "+p_f+"&lt;/p>");
+            out.println("&lt;p>backwards probability = "+p_b+"&lt;/p>");
+            
+            out.println("&lt;p>&lt;a href='"+modelPath+"'>The Model&lt;/a>&lt;/p>");
+            out.println("&lt;p>(you may need to do a 'view source' to see the XML)&lt;/p>");
+            
+         } catch (java.io.IOException ex) {
+            ex.printStackTrace();
+         } catch (org.xml.sax.SAXException ex) {
+            ex.printStackTrace();
+         } catch (javax.xml.parsers.ParserConfigurationException ex) {
+            ex.printStackTrace();
+         }
+      }
+   }
+</jsp:scriptlet>
+</body>
+</html>
+</jsp:root>

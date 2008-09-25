@@ -1,0 +1,202 @@
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0" 
+          xmlns:input="http://jakarta.apache.org/taglibs/input-1.0">
+<jsp:directive.page import="java.io.*,java.util.*,java.text.*,javax.xml.parsers.*,org.xml.sax.*,com.milowski.hmm.*,com.milowski.hmm.tools.*"
+   contentType="text/html"
+/>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head><title>JHMM Demonstration - Train Model</title>
+<style type="text/css">
+div.options { display: table; }
+div.option { display: table-row;}
+div.label { display: table-cell; 
+   padding-right: 10pt;
+}
+div > p {
+   padding: 2pt; margin: 0pt; margin-bottom: 2pt;
+}
+div.field { display: table-cell;  padding: 0pt; margin:0pt;}
+</style>
+</head>
+<body>
+<jsp:include page="navigation.jsp"/>
+<form method="POST" action="train.jspx">
+<p>1. Select your model from the list below.</p>
+<p> Model
+<jsp:include page="model-list.jsp"/>
+<!--
+<select name="model">
+<option value="two-state-set-emissions.xml">Two State/Binary</option>
+<option value="two-state-two-maximum.xml">Two State/Binary/Two Maximum</option>
+<option value="two-dice-model.xml">Two Dice Model</option>
+</select>
+-->
+</p>
+<p>2. Enter your observation data below.  If you wish to get observation data, <a href="generate.jspx">generate data</a> via this website and then cut-n-paste the data into this form.</p>
+<p>Data:</p>
+<textarea name="data" rows="20" cols="40">
+<!-- -->
+<jsp:expression>request.getParameter("data")==null ? "" : request.getParameter("data")</jsp:expression>
+</textarea>
+<p>3. Select your options:</p>
+<p>The training limit effects how many iterations of training via the Baum-Welch algorithm.  When all differences between
+each parameter being trained and the previous value are less than this limit, training will stop.</p>
+<p>Training Limit (error): <input:text name="limit" default="0.005"/></p>
+<p>A random set of parameters can be choosen as a starting point.  This controls whether the <b>trained</b> parameters will be randomly selected at training time.  Otherwise, the
+default model parameters will be used.</p>
+<p>Random Starting Point: Yes  <input:radio name="random" value="yes" /> No <input:radio name="random" value="no" default="no"/> </p>
+<p>These options select what parameters will be trained.  These also control which parameters will be
+randomly generated if you select a random starting point via the above.</p>
+<div class="options">
+<div class="option">
+<div class="label"><p>Initial/Final:</p></div>
+<div class="field"><p>Yes  <input:radio name="initial" value="yes"/> No <input:radio name="initial" value="no" default="no"/> </p></div>
+</div>
+<div class="option">
+<div class="label"><p>Transitions:</p></div>
+<div class="field"><p>Yes  <input:radio name="trans" value="yes" default="yes"/> No <input:radio name="trans" value="no"/> </p></div>
+</div>
+<div class="option">
+<div class="label"><p>Emissions:</p></div>
+<div class="field"><p>Yes  <input:radio name="emit" value="yes" /> No <input:radio name="emit" value="no" default="no"/> </p></div>
+</div>
+</div>
+<p>4. Make it go!
+<input type="submit" value="Train"/>
+</p>
+</form>
+<jsp:scriptlet>
+   boolean badData = false;
+   String dataStr = request.getParameter("data");
+   if (dataStr!=null) {
+      if (dataStr.length()==0) {
+         badData = true;
+         out.println("&lt;p class='error'>The training data specified.&lt;/p>");
+      }
+      ServletContext context = getServletContext();
+      String path = context.getInitParameter("model-repository");
+      File repository = new File(context.getRealPath(path));
+      
+      File modelPath = new File(repository,request.getParameter("model"));
+      boolean initial = request.getParameter("initial").equals("yes");
+      boolean transitions = request.getParameter("trans").equals("yes");
+      boolean emissions = request.getParameter("emit").equals("yes");
+      boolean random = request.getParameter("random").equals("yes");
+      double trainingLimit = Double.parseDouble(request.getParameter("limit"));
+      if (!badData) {
+      
+         try {
+            SAXParserFactory saxFactory = SAXParserFactory.newInstance();
+            saxFactory.setNamespaceAware(true);
+            SAXParser saxParser = saxFactory.newSAXParser();
+            XMLReader xmlReader = saxParser.getXMLReader();
+
+            XMLModelReader modelReader = new XMLModelReader(xmlReader);
+            FileReader modelInput = new FileReader(modelPath);
+            InputSource source = new InputSource(modelInput);
+
+            Model model = modelReader.load(source);
+
+            modelInput.close();
+
+            if (random) {
+              model.randomize(false,transitions,emissions);
+            }
+            
+            model.check();
+
+            Model.Translator translator = model.getTranslator();
+            List sequences = Train.loadSequenceCounts(new StringReader(dataStr),translator);
+            
+            Engine hmmEngine = new Engine();
+            hmmEngine.loadModel(model);
+            hmmEngine.setTraining(initial,transitions,emissions);
+            TrainingPathRecorder recorder = new TrainingPathRecorder();
+            hmmEngine.setTrainingTracer(recorder);
+            hmmEngine.train(sequences,trainingLimit,null);
+
+            hmmEngine.updateModel(model);
+
+            double s[][] = model.getStateTransitions();
+            double t[][] = model.getStateEmissions();
+            out.println("&lt;table>");
+            out.println("&lt;tr>&lt;th>State Index&lt;/th>&lt;th>State Name&lt;/th>&lt;/tr>");
+            out.println("&lt;tr>&lt;td>0&lt;/td>&lt;td>start/end &lt;/td>&lt;/tr>");
+            for (int state=1; state&lt;s.length; state++) {
+               out.println("&lt;tr>&lt;td>"+state+"&lt;/td>&lt;td>"+model.getStateName(state)+"&lt;/td>&lt;/tr>");
+            }
+            out.println("&lt;/table>");
+            out.println("&lt;pre>");
+            NumberFormat formatter = NumberFormat.getInstance();
+            formatter.setMaximumFractionDigits(2);
+            formatter.setMinimumFractionDigits(2);
+            for (int row=0; row&lt;s.length; row++) {
+               out.print(row==0 ? "S = " : "    ");
+               for (int col=0; col&lt;s[row].length; col++) {
+                  out.print(formatter.format(s[row][col]));
+                  out.print(" ");
+               }
+               out.println();
+            }
+            out.println();
+            for (int row=0; row&lt;t.length; row++) {
+               out.print(row==0 ? "T = " : "    ");
+               for (int col=0; col&lt;t[row].length; col++) {
+                  out.print(formatter.format(t[row][col]));
+                  out.print(" ");
+               }
+               out.println();
+            }
+            out.println("&lt;/pre>");
+            out.println("&lt;pre>");
+            int steps = recorder.getSteps();
+            out.println("# of training steps: "+steps);
+            out.println();
+
+            List [][] p = recorder.getTransitionSteps();
+            for (int step=0; step&lt;steps; step++) {
+               out.print("S"+(step+1)+"=[ ");
+               for (int from=0; from&lt;p.length; from++) {
+                  for (int to=0; to&lt;p[from].length; to++) {
+                     out.print(formatter.format(Math.exp(((Double)p[from][to].get(step)).doubleValue())));
+                     out.print(' ');
+                  }
+                  if ((from+1)!=p.length) {
+                     out.print("\\ ");
+                  }
+               }
+               out.println("]");
+            }
+            out.println();
+            List [][] emit = recorder.getEmissionSteps();
+            for (int step=0; step&lt;steps; step++) {
+               out.print("T"+(step+1)+"=[ ");
+               for (int from=0; from&lt;emit.length; from++) {
+                  for (int to=0; to&lt;emit[from].length; to++) {
+                     out.print(formatter.format(Math.exp(((Double)emit[from][to].get(step)).doubleValue())));
+                     out.print(' ');
+                  }
+                  if ((from+1)!=p.length) {
+                     out.print("\\ ");
+                  }
+               }
+               out.println("]");
+            }
+            out.println("&lt;/pre>");
+            /*
+            XMLModelWriter modelWriter = new XMLModelWriter(out);
+            modelWriter.write(model);
+            */
+            
+         } catch (java.io.IOException ex) {
+            ex.printStackTrace();
+         } catch (org.xml.sax.SAXException ex) {
+            ex.printStackTrace();
+         } catch (javax.xml.parsers.ParserConfigurationException ex) {
+            ex.printStackTrace();
+         }
+      }
+   }
+</jsp:scriptlet>
+</body>
+</html>
+</jsp:root>
