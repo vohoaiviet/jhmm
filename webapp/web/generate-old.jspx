@@ -1,0 +1,167 @@
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0" 
+          xmlns:input="http://jakarta.apache.org/taglibs/input-1.0">
+<jsp:directive.page import="java.io.*,java.util.*,javax.xml.parsers.*,org.xml.sax.*,com.milowski.hmm.*,com.milowski.hmm.tools.*"
+   contentType="text/html"
+/>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head><title>JHMM Demonstration - Generate Data</title>
+<style type="text/css">
+div.options { display: table; }
+div.option { display: table-row;}
+div.label { display: table-cell; 
+   padding-right: 10pt;
+}
+div > p {
+   padding: 2pt; margin: 0pt; margin-bottom: 2pt;
+}
+div.field { display: table-cell;  padding: 0pt; margin:0pt;}
+p.error { color: red; }
+</style>
+</head>
+<body>
+<jsp:include page="navigation.jsp"/>
+<form method="POST" action="generate-decision.jsp">
+<input type="hidden" name="form" value="true"/>
+<p>This form lets you generate observation data from a model.  You need to decide the following:</p>
+<ol>
+<li>
+<p>Select the model:</p>
+<p><jsp:include page="model-list.jsp"/></p>
+</li>
+<li>
+<p>Select the length and number of sequences:</p>
+<p>Length <input:text name="size" default="3"/>
+ Number <input:text name="number" default="500"/></p>
+
+</li>
+<li>
+<p>Select where the data will go: </p>
+<p> Display <input:radio name="display" value="yes" default="yes"/> Download <input:radio name="display" value="no"/></p>
+</li>
+ 
+<li>
+<p>Generate the data by submitting this form: <input type="submit" value="Generate"/> </p>
+</li>
+</ol>
+<jsp:scriptlet>
+String form = request.getParameter("form");
+if (form!=null) {
+   String sizeStr = request.getParameter("size");
+   if (sizeStr==null || sizeStr.length()==0) {
+      out.println("&lt;p class='error'>The length of the sequence must be specified.&lt;/p>");
+   }
+   String numberStr = request.getParameter("number");
+   if (numberStr==null || numberStr.length()==0) {
+      out.println("&lt;p class='error'>The number of sequences must be specified.&lt;/p>");
+   }
+}
+</jsp:scriptlet>
+</form>
+<!--
+<jsp:scriptlet>
+   boolean badData = false;
+   String sizeStr = request.getParameter("size");
+   if (sizeStr!=null) {
+      if (sizeStr==null || sizeStr.length()==0) {
+         badData = true;
+         out.println("&lt;p class='error'>The length of the sequence must be specified.&lt;/p>");
+      }
+      String numberStr = request.getParameter("number");
+      if (numberStr==null || numberStr.length()==0) {
+         badData = true;
+         out.println("&lt;p class='error'>The number of sequences must be specified.&lt;/p>");
+      }
+      ServletContext context = getServletContext();
+      String path = context.getInitParameter("model-repository");
+      File repository = new File(context.getRealPath(path));
+      
+      File modelPath = new File(repository,request.getParameter("model"));
+      if (!badData) {
+         int length = Integer.parseInt(sizeStr);
+         int count = Integer.parseInt(numberStr);
+      
+         try {
+            SAXParserFactory saxFactory = SAXParserFactory.newInstance();
+            saxFactory.setNamespaceAware(true);
+            SAXParser saxParser = saxFactory.newSAXParser();
+            XMLReader xmlReader = saxParser.getXMLReader();
+
+            XMLModelReader modelReader = new XMLModelReader(xmlReader);
+            FileReader modelInput = new FileReader(modelPath);
+            InputSource source = new InputSource(modelInput);
+
+            Model model = modelReader.load(source);
+
+            modelInput.close();
+
+            model.check();
+
+            if (count==1) {
+               out.println("&lt;pre>");
+               out.println("Results:");
+               int [][] result = model.generateSequence(length);
+
+               List lexicon = model.getLexicon();
+               for (int i=0; i&lt;result[0].length; i++) {
+                  out.print((Character)lexicon.get(result[0][i]));
+               }
+               out.println();
+               int numberOfStates = model.getNumberOfStates();
+               if (numberOfStates>9) {
+                  for (int i=0; i&lt;result[1].length; i++) {
+                     out.print(result[1][i]);
+                     out.print(',');
+                  }
+               } else {
+                  for (int i=0; i&lt;result[1].length; i++) {
+                     out.print(result[1][i]);
+                  }
+               }
+               out.println();
+               for (int i=1; i&lt;numberOfStates; i++) {
+                  out.println(i+" = "+model.getStateName(i));
+               }
+               out.println("&lt;/pre>");
+               out.println("&lt;p>&lt;a href='"+modelPath+"'>xml model&lt;/a>&lt;/p>");
+            } else {
+               List lexicon = model.getLexicon();
+               Generate.ListOfSequences uniqueSeqs = new Generate.ListOfSequences();
+               for (int i=0; i&lt;count; i++) {
+                  int [][] result = model.generateSequence(length);
+                  uniqueSeqs.addSequence(result[0]);
+               }
+               out.println("&lt;pre>");
+               Iterator seqs = uniqueSeqs.iterator();
+               int sum = 0;
+               while (seqs.hasNext()) {
+                  Generate.SequenceCount seq = (Generate.SequenceCount)seqs.next();
+                  int [] key = seq.getSequence();
+                  for (int i=0; i&lt;key.length; i++) {
+                     out.print((Character)lexicon.get(key[i]));
+                  }
+                  out.print(',');
+                  out.println(seq.getCount());
+                  sum += seq.getCount();
+               }
+               out.println();
+               out.println("Total: "+sum);
+               out.println("&lt;/pre>");
+               out.println("&lt;p>&lt;a href='"+modelPath+"'>The Model&lt;/a>&lt;/p>");
+               out.println("&lt;p>(you may need to do a 'view source' to see the XML)&lt;/p>");
+
+            }
+
+         } catch (java.io.IOException ex) {
+            ex.printStackTrace();
+         } catch (org.xml.sax.SAXException ex) {
+            ex.printStackTrace();
+         } catch (javax.xml.parsers.ParserConfigurationException ex) {
+            ex.printStackTrace();
+         }
+      }
+   }
+</jsp:scriptlet>
+-->
+</body>
+</html>
+</jsp:root>

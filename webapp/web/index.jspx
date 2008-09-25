@@ -1,0 +1,12 @@
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head><title>JHMM Demonstration</title></head>
+<body>
+<p><a href="generate.jspx">Generate Data</a></p>
+<!--
+<p><a href="predict.jspx">Predict State Sequence</a></p>
+-->
+<p><a href="train.jspx">Train a Model</a></p>
+</body>
+</html>
+</jsp:root>
