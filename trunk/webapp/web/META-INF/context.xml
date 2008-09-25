@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context docBase="/Users/alex/workspace/math/hmm/webapp" path="/hmm-app">
+  <Logger className="org.apache.catalina.logger.FileLogger" prefix="hmm-app." suffix=".log" timestamp="true"/>
+</Context>
