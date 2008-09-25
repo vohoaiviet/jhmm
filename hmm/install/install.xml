@@ -16,12 +16,12 @@
         The meaning of the tags should be natural ...
     -->
     <info>
-        <appname>JHmm</appname>
-        <appversion>0.1</appversion>
+        <appname>jHMM</appname>
+        <appversion>1.1.0</appversion>
         <authors>
             <author name="R. Alexander Milowski" email="alex@milowski.com"/>
         </authors>
-        <url>http://www.milowski.com/math/hmm/</url>
+        <url>http://www.milowski.com/math/jhmm/</url>
     </info>
     
     <!-- 
@@ -73,9 +73,10 @@
             <file src="hmmpredict" targetdir="$INSTALL_PATH"/>
             <file src="hmmtrain" targetdir="$INSTALL_PATH"/>
             <file src="hmmgenerate" targetdir="$INSTALL_PATH"/>
-            <file src="../jhmm-0.1/lib" targetdir="$INSTALL_PATH"/>
-            <file src="../jhmm-0.1/examples" targetdir="$INSTALL_PATH"/>
-            <file src="../jhmm-0.1/docs" targetdir="$INSTALL_PATH"/>
+            <file src="../dist/jhmm-1.1.0/lib" targetdir="$INSTALL_PATH"/>
+            <file src="../dist/jhmm-1.1.0/examples" targetdir="$INSTALL_PATH"/>
+            <file src="../dist/jhmm-1.1.0/docs" targetdir="$INSTALL_PATH"/>
+            <file src="../dist/jhmm-1.1.0/jhmm.jar" targetdir="$INSTALL_PATH"/>
             <parsable targetfile="$INSTALL_PATH/hmmtrain"/>
             <parsable targetfile="$INSTALL_PATH/hmmpredict"/>
             <parsable targetfile="$INSTALL_PATH/hmmgenerate"/>
