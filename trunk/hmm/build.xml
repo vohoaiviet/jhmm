@@ -62,11 +62,39 @@
     nbproject/build-impl.xml file. 
 
     -->
-<property name="version" value="n"/>
+<property file="version.properties"/>
+<property name="version.label" value="${version.major}.${version.minor}.${version.release}"/>
+<property name="izpack.dir" value="/opt/izpack"/>
+<taskdef name="izpack" classpath="${izpack.dir}/lib/compiler.jar" classname="com.izforge.izpack.ant.IzPackTask"/>
 
-<target name="release">
-  <zip basedir=".." includes="hmm/**" destfile="../jhmm-${version}.zip"/>
-  <tar basedir=".." includes="hmm/**" destfile="../jhmm-${version}.tar"/>
-  <gzip src="../jhmm-${version}.tar" destfile="../jhmm-${version}.tar.gz"/>
+
+<target name="release" depends="init">
+  <property name="release.dir" location="${dist.dir}/jhmm-${version.label}"/>
+  <delete dir="${release.dir}"/>
+  <mkdir dir="${release.dir}"/>
+  <mkdir dir="${release.dir}/docs/api"/>
+  <copy file="${dist.dir}/jhmm.jar" todir="${release.dir}"/>
+  <copy todir="${release.dir}/docs/api">
+     <fileset dir="${dist.dir}/javadoc"/>
+  </copy>
+  <mkdir dir="${release.dir}/lib"/>
+  <copy todir="${release.dir}/lib">
+     <fileset dir="${base.dir}/../../thirdparty/xml-infoset"/>
+  </copy>
+  <mkdir dir="${release.dir}/examples"/>
+  <copy todir="${release.dir}/examples">
+     <fileset dir="${src.dir}/examples"/>
+  </copy>
+  <zip basedir="${dist.dir}" includes="jhmm-${version.label}/**" destfile="${dist.dir}/jhmm-${version.label}.zip"/>
+  <tar basedir="${dist.dir}" includes="jhmm-${version.label}/**" destfile="${dist.dir}/jhmm-${version.label}.tar"/>
+  <gzip src="${dist.dir}/jhmm-${version.label}.tar" destfile="${dist.dir}/jhmm-${version.label}.tar.gz"/>
+</target>
+
+<target name="installer" depends="init">
+       <izpack input="install/install.xml"
+               output="${dist.dir}/jhmm-install-${version.label}.jar"
+               installerType="standard"
+               basedir="install"
+               izPackDir="${izpack.dir}"/>
 </target>
 </project>
