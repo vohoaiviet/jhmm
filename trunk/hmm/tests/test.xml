@@ -1,0 +1,615 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<training-scenarios>
+<training-scenario name='s1'>
+<observation-data>
+110,28
+011,59
+000,113
+001,102
+010,80
+111,33
+101,32
+100,53
+</observation-data>
+<transitions>
+ 0.0 1.0 1.0
+ 1.0 0.0 1.0
+ 1.0 1.0 0.0
+</transitions>
+</training-scenario>
+<training-scenario name='s2'>
+<observation-data>
+110,28
+011,59
+000,113
+001,102
+010,80
+111,33
+101,32
+100,53
+</observation-data>
+<transitions>
+ 0.0 1.0 1.0
+ 1.0 0.0 1.0
+ 1.0 0.8 0.2
+</transitions>
+</training-scenario>
+<training-scenario name='s3'>
+<observation-data>
+110,28
+011,59
+000,113
+001,102
+010,80
+111,33
+101,32
+100,53
+</observation-data>
+<transitions>
+ 0.0 1.0 1.0
+ 1.0 0.0 1.0
+ 1.0 0.6 0.4
+</transitions>
+</training-scenario>
+<training-scenario name='s4'>
+<observation-data>
+110,28
+011,59
+000,113
+001,102
+010,80
+111,33
+101,32
+100,53
+</observation-data>
+<transitions>
+ 0.0 1.0 1.0
+ 1.0 0.0 1.0
+ 1.0 0.3999999999999999 0.6000000000000001
+</transitions>
+</training-scenario>
+<training-scenario name='s5'>
+<observation-data>
+110,28
+011,59
+000,113
+001,102
+010,80
+111,33
+101,32
+100,53
+</observation-data>
+<transitions>
+ 0.0 1.0 1.0
+ 1.0 0.0 1.0
+ 1.0 0.19999999999999996 0.8
+</transitions>
+</training-scenario>
+<training-scenario name='s6'>
+<observation-data>
+110,28
+011,59
+000,113
+001,102
+010,80
+111,33
+101,32
+100,53
+</observation-data>
+<transitions>
+ 0.0 1.0 1.0
+ 1.0 0.0 1.0
+ 1.0 0.0 1.0
+</transitions>
+</training-scenario>
+<training-scenario name='s7'>
+<observation-data>
+110,28
+011,59
+000,113
+001,102
+010,80
+111,33
+101,32
+100,53
+</observation-data>
+<transitions>
+ 0.0 1.0 1.0
+ 1.0 0.2 0.8
+ 1.0 1.0 0.0
+</transitions>
+</training-scenario>
+<training-scenario name='s8'>
+<observation-data>
+110,28
+011,59
+000,113
+001,102
+010,80
+111,33
+101,32
+100,53
+</observation-data>
+<transitions>
+ 0.0 1.0 1.0
+ 1.0 0.2 0.8
+ 1.0 0.8 0.2
+</transitions>
+</training-scenario>
+<training-scenario name='s9'>
+<observation-data>
+110,28
+011,59
+000,113
+001,102
+010,80
+111,33
+101,32
+100,53
+</observation-data>
+<transitions>
+ 0.0 1.0 1.0
+ 1.0 0.2 0.8
+ 1.0 0.6 0.4
+</transitions>
+</training-scenario>
+<training-scenario name='s10'>
+<observation-data>
+110,28
+011,59
+000,113
+001,102
+010,80
+111,33
+101,32
+100,53
+</observation-data>
+<transitions>
+ 0.0 1.0 1.0
+ 1.0 0.2 0.8
+ 1.0 0.3999999999999999 0.6000000000000001
+</transitions>
+</training-scenario>
+<training-scenario name='s11'>
+<observation-data>
+110,28
+011,59
+000,113
+001,102
+010,80
+111,33
+101,32
+100,53
+</observation-data>
+<transitions>
+ 0.0 1.0 1.0
+ 1.0 0.2 0.8
+ 1.0 0.19999999999999996 0.8
+</transitions>
+</training-scenario>
+<training-scenario name='s12'>
+<observation-data>
+110,28
+011,59
+000,113
+001,102
+010,80
+111,33
+101,32
+100,53
+</observation-data>
+<transitions>
+ 0.0 1.0 1.0
+ 1.0 0.2 0.8
+ 1.0 0.0 1.0
+</transitions>
+</training-scenario>
+<training-scenario name='s13'>
+<observation-data>
+110,28
+011,59
+000,113
+001,102
+010,80
+111,33
+101,32
+100,53
+</observation-data>
+<transitions>
+ 0.0 1.0 1.0
+ 1.0 0.4 0.6
+ 1.0 1.0 0.0
+</transitions>
+</training-scenario>
+<training-scenario name='s14'>
+<observation-data>
+110,28
+011,59
+000,113
+001,102
+010,80
+111,33
+101,32
+100,53
+</observation-data>
+<transitions>
+ 0.0 1.0 1.0
+ 1.0 0.4 0.6
+ 1.0 0.8 0.2
+</transitions>
+</training-scenario>
+<training-scenario name='s15'>
+<observation-data>
+110,28
+011,59
+000,113
+001,102
+010,80
+111,33
+101,32
+100,53
+</observation-data>
+<transitions>
+ 0.0 1.0 1.0
+ 1.0 0.4 0.6
+ 1.0 0.6 0.4
+</transitions>
+</training-scenario>
+<training-scenario name='s16'>
+<observation-data>
+110,28
+011,59
+000,113
+001,102
+010,80
+111,33
+101,32
+100,53
+</observation-data>
+<transitions>
+ 0.0 1.0 1.0
+ 1.0 0.4 0.6
+ 1.0 0.3999999999999999 0.6000000000000001
+</transitions>
+</training-scenario>
+<training-scenario name='s17'>
+<observation-data>
+110,28
+011,59
+000,113
+001,102
+010,80
+111,33
+101,32
+100,53
+</observation-data>
+<transitions>
+ 0.0 1.0 1.0
+ 1.0 0.4 0.6
+ 1.0 0.19999999999999996 0.8
+</transitions>
+</training-scenario>
+<training-scenario name='s18'>
+<observation-data>
+110,28
+011,59
+000,113
+001,102
+010,80
+111,33
+101,32
+100,53
+</observation-data>
+<transitions>
+ 0.0 1.0 1.0
+ 1.0 0.4 0.6
+ 1.0 0.0 1.0
+</transitions>
+</training-scenario>
+<training-scenario name='s19'>
+<observation-data>
+110,28
+011,59
+000,113
+001,102
+010,80
+111,33
+101,32
+100,53
+</observation-data>
+<transitions>
+ 0.0 1.0 1.0
+ 1.0 0.6000000000000001 0.3999999999999999
+ 1.0 1.0 0.0
+</transitions>
+</training-scenario>
+<training-scenario name='s20'>
+<observation-data>
+110,28
+011,59
+000,113
+001,102
+010,80
+111,33
+101,32
+100,53
+</observation-data>
+<transitions>
+ 0.0 1.0 1.0
+ 1.0 0.6000000000000001 0.3999999999999999
+ 1.0 0.8 0.2
+</transitions>
+</training-scenario>
+<training-scenario name='s21'>
+<observation-data>
+110,28
+011,59
+000,113
+001,102
+010,80
+111,33
+101,32
+100,53
+</observation-data>
+<transitions>
+ 0.0 1.0 1.0
+ 1.0 0.6000000000000001 0.3999999999999999
+ 1.0 0.6 0.4
+</transitions>
+</training-scenario>
+<training-scenario name='s22'>
+<observation-data>
+110,28
+011,59
+000,113
+001,102
+010,80
+111,33
+101,32
+100,53
+</observation-data>
+<transitions>
+ 0.0 1.0 1.0
+ 1.0 0.6000000000000001 0.3999999999999999
+ 1.0 0.3999999999999999 0.6000000000000001
+</transitions>
+</training-scenario>
+<training-scenario name='s23'>
+<observation-data>
+110,28
+011,59
+000,113
+001,102
+010,80
+111,33
+101,32
+100,53
+</observation-data>
+<transitions>
+ 0.0 1.0 1.0
+ 1.0 0.6000000000000001 0.3999999999999999
+ 1.0 0.19999999999999996 0.8
+</transitions>
+</training-scenario>
+<training-scenario name='s24'>
+<observation-data>
+110,28
+011,59
+000,113
+001,102
+010,80
+111,33
+101,32
+100,53
+</observation-data>
+<transitions>
+ 0.0 1.0 1.0
+ 1.0 0.6000000000000001 0.3999999999999999
+ 1.0 0.0 1.0
+</transitions>
+</training-scenario>
+<training-scenario name='s25'>
+<observation-data>
+110,28
+011,59
+000,113
+001,102
+010,80
+111,33
+101,32
+100,53
+</observation-data>
+<transitions>
+ 0.0 1.0 1.0
+ 1.0 0.8 0.19999999999999996
+ 1.0 1.0 0.0
+</transitions>
+</training-scenario>
+<training-scenario name='s26'>
+<observation-data>
+110,28
+011,59
+000,113
+001,102
+010,80
+111,33
+101,32
+100,53
+</observation-data>
+<transitions>
+ 0.0 1.0 1.0
+ 1.0 0.8 0.19999999999999996
+ 1.0 0.8 0.2
+</transitions>
+</training-scenario>
+<training-scenario name='s27'>
+<observation-data>
+110,28
+011,59
+000,113
+001,102
+010,80
+111,33
+101,32
+100,53
+</observation-data>
+<transitions>
+ 0.0 1.0 1.0
+ 1.0 0.8 0.19999999999999996
+ 1.0 0.6 0.4
+</transitions>
+</training-scenario>
+<training-scenario name='s28'>
+<observation-data>
+110,28
+011,59
+000,113
+001,102
+010,80
+111,33
+101,32
+100,53
+</observation-data>
+<transitions>
+ 0.0 1.0 1.0
+ 1.0 0.8 0.19999999999999996
+ 1.0 0.3999999999999999 0.6000000000000001
+</transitions>
+</training-scenario>
+<training-scenario name='s29'>
+<observation-data>
+110,28
+011,59
+000,113
+001,102
+010,80
+111,33
+101,32
+100,53
+</observation-data>
+<transitions>
+ 0.0 1.0 1.0
+ 1.0 0.8 0.19999999999999996
+ 1.0 0.19999999999999996 0.8
+</transitions>
+</training-scenario>
+<training-scenario name='s30'>
+<observation-data>
+110,28
+011,59
+000,113
+001,102
+010,80
+111,33
+101,32
+100,53
+</observation-data>
+<transitions>
+ 0.0 1.0 1.0
+ 1.0 0.8 0.19999999999999996
+ 1.0 0.0 1.0
+</transitions>
+</training-scenario>
+<training-scenario name='s31'>
+<observation-data>
+110,28
+011,59
+000,113
+001,102
+010,80
+111,33
+101,32
+100,53
+</observation-data>
+<transitions>
+ 0.0 1.0 1.0
+ 1.0 1.0 0.0
+ 1.0 1.0 0.0
+</transitions>
+</training-scenario>
+<training-scenario name='s32'>
+<observation-data>
+110,28
+011,59
+000,113
+001,102
+010,80
+111,33
+101,32
+100,53
+</observation-data>
+<transitions>
+ 0.0 1.0 1.0
+ 1.0 1.0 0.0
+ 1.0 0.8 0.2
+</transitions>
+</training-scenario>
+<training-scenario name='s33'>
+<observation-data>
+110,28
+011,59
+000,113
+001,102
+010,80
+111,33
+101,32
+100,53
+</observation-data>
+<transitions>
+ 0.0 1.0 1.0
+ 1.0 1.0 0.0
+ 1.0 0.6 0.4
+</transitions>
+</training-scenario>
+<training-scenario name='s34'>
+<observation-data>
+110,28
+011,59
+000,113
+001,102
+010,80
+111,33
+101,32
+100,53
+</observation-data>
+<transitions>
+ 0.0 1.0 1.0
+ 1.0 1.0 0.0
+ 1.0 0.3999999999999999 0.6000000000000001
+</transitions>
+</training-scenario>
+<training-scenario name='s35'>
+<observation-data>
+110,28
+011,59
+000,113
+001,102
+010,80
+111,33
+101,32
+100,53
+</observation-data>
+<transitions>
+ 0.0 1.0 1.0
+ 1.0 1.0 0.0
+ 1.0 0.19999999999999996 0.8
+</transitions>
+</training-scenario>
+<training-scenario name='s36'>
+<observation-data>
+110,28
+011,59
+000,113
+001,102
+010,80
+111,33
+101,32
+100,53
+</observation-data>
+<transitions>
+ 0.0 1.0 1.0
+ 1.0 1.0 0.0
+ 1.0 0.0 1.0
+</transitions>
+</training-scenario>
+</training-scenarios>

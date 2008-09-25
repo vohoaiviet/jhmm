@@ -1,0 +1,4 @@
+<pipe xmlns="urn:publicid:IDN+smallx.com:pipeline:1.0" name="scenario2text">
+<xslt src="scenario2text-xt.xsl"/>
+</pipe>
+

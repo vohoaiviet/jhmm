@@ -1,0 +1,6 @@
+<pipe xmlns="urn:publicid:IDN+smallx.com:pipeline:1.0" name="scenario2text">
+<subtree-view select="training-scenario">
+<xslt src="scenario2text-xt.xsl"/>
+</subtree-view>
+</pipe>
+
