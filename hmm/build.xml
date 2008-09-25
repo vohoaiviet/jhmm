@@ -85,6 +85,7 @@
   <copy todir="${release.dir}/examples">
      <fileset dir="${src.dir}/examples"/>
   </copy>
+  <zip basedir="${basedir}" includes="src/**" destfile="${dist.dir}/jhmm-${version.label}/src.zip"/>
   <zip basedir="${dist.dir}" includes="jhmm-${version.label}/**" destfile="${dist.dir}/jhmm-${version.label}.zip"/>
   <tar basedir="${dist.dir}" includes="jhmm-${version.label}/**" destfile="${dist.dir}/jhmm-${version.label}.tar"/>
   <gzip src="${dist.dir}/jhmm-${version.label}.tar" destfile="${dist.dir}/jhmm-${version.label}.tar.gz"/>
