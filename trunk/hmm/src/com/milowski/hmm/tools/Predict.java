@@ -37,7 +37,10 @@ public class Predict {
          }
          for (int i=0; i<len; i++) {
             sequence[start+i] = translator.translate(buffer[i]);
-         }
+            if (sequence[start+i]<0) {
+               throw new IOException("Sequence character '"+buffer[i]+"' ("+((int)buffer[i])+") at offset "+(start+i)+" is not in the model's lexicon.");
+            }
+        }
       }
       return sequence;
    }
@@ -73,7 +76,7 @@ public class Predict {
          FileReader sequenceInput = new FileReader(args[1]);
          
          short [] sequence = load(sequenceInput,translator);
-
+         
          sequenceInput.close();
 
          Engine.Prediction prediction = hmmEngine.mostLikely(sequence);
