@@ -39,7 +39,7 @@ public class Generate {
          for (int i=0; i<len; i++) {
             sequence[start+i] = translator.translate(buffer[i]);
             if (sequence[start+i]<0) {
-               throw new java.io.IOException("Invalid character '"+buffer[i]+"' in sequence file "+name);
+               throw new IOException("Sequence character '"+buffer[i]+"' ("+((int)buffer[i])+") at offset "+(start+i)+" is not in the model's lexicon.");
             }
          }
       }

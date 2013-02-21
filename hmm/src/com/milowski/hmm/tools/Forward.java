@@ -38,7 +38,7 @@ public class Forward {
          for (int i=0; i<len; i++) {
             sequence[start+i] = translator.translate(buffer[i]);
             if (sequence[start+i]<0) {
-               throw new IOException("Sequence character "+buffer[i]+" is not in the model's lexicon.");
+               throw new IOException("Sequence character '"+buffer[i]+"' ("+((int)buffer[i])+") at offset "+(start+i)+" is not in the model's lexicon.");
             }
          }
       }

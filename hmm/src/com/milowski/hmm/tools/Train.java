@@ -58,7 +58,7 @@ public class Train {
             char ch = line.charAt(pos);
             sequence[pos] = translator.translate(ch);
             if (sequence[pos]<0) {
-               throw new IOException("Sequence character "+ch+" is not in the model's lexicon.");
+               throw new IOException("Sequence character '"+ch+"' ("+((int)ch)+") at offset "+pos+" is not in the model's lexicon.");
             }
          }
          int count = comma==line.length() ? 1 : Integer.parseInt(line.substring(comma+1));
@@ -153,7 +153,7 @@ public class Train {
          for (int i=0; i<len; i++) {
             sequence[start+i] = translator.translate(buffer[i]);
             if (sequence[start+i]<0) {
-               throw new java.io.IOException("Invalid character '"+buffer[i]+"' in sequence file "+name);
+               throw new IOException("Sequence character '"+buffer[i]+"' ("+((int)buffer[i])+") at offset "+(start+i)+" is not in the model's lexicon.");
             }
          }
       }
